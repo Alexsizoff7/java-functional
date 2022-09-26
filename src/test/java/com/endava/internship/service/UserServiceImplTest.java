@@ -145,6 +145,19 @@ public class UserServiceImplTest {
     }
 
     @Test
+    void shouldReturnOptionalEmptyIfThereAreDistinctAndOccurMultipleTimesNumberOfLastNames() {
+        final User user1 = new User(1L, "John", "Doe", 26, singletonList(Privilege.UPDATE));
+        final User user4 = new User(4L, "John", "Doe", 26, singletonList(Privilege.UPDATE));
+        final User user2 = new User(2L, "Greg", "Jonson", 30, singletonList(Privilege.UPDATE));
+        final User user3 = new User(3L, "Alex", "Jonson", 13, singletonList(Privilege.DELETE));
+
+        final Optional<String> mostFrequentLastName =
+                userService.getMostFrequentLastName(asList(user1, user2, user3, user4));
+
+        assertThat(mostFrequentLastName).isEmpty();
+    }
+
+    @Test
     void shouldFilterListOfUsersByGivenConditions() {
         final User user1 = new User(1L, "John", "Doe", 26, singletonList(Privilege.UPDATE));
         final User user2 = new User(2L, "Greg", "Jonson", 30, asList(Privilege.UPDATE, Privilege.CREATE, Privilege.DELETE));
