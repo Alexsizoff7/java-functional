@@ -5,6 +5,7 @@ import com.endava.internship.domain.User;
 
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -17,21 +18,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<String> getFirstNamesReverseSorted(List<User> users) {
         return users.stream()
-                .sorted((a, b) -> b.getFirstName().compareTo(a.getFirstName()))
                 .map(User::getFirstName)
+                .sorted(Comparator.reverseOrder())
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<User> sortByAgeDescAndNameAsc(final List<User> users) {
         return users.stream()
-                .sorted((a, b) -> {
-                    if (b.getAge().compareTo(a.getAge()) != 0) {
-                        return b.getAge().compareTo(a.getAge());
-                    } else {
-                        return a.getFirstName().compareTo(b.getFirstName());
-                    }
-                })
+                .sorted(Comparator.comparing(User::getAge).reversed()
+                        .thenComparing(User::getFirstName))
                 .collect(Collectors.toList());
     }
 
